@@ -38,7 +38,11 @@ DOI to Zotero Data Sync is easy to use. Simply provide the DOIs of the journal a
 npm start -- <DOI1> <DOI2> ... <DOIn>
 `````` 
 
+
 You can also use the `--test` option to run the tool in test mode without making actual updates to your Zotero collection.
+
+
+
 
 Here's an example of how to use the tool with test mode:
 
@@ -60,7 +64,10 @@ This command allows you to add or update journal articles in your Zotero collect
 
 Options:
 
-- `--test`: Run the tool in test mode without making updates to your Zotero collection.
+- `-t`, `--test`: Run the tool in test mode without making updates to your Zotero collection.
+- `-g`, `--group`: Specify the Zotero group ID to use. If not specified, the tool will use the default group.
+- `--help`: Display help information.
+
 
 ### `npm install`
 
