@@ -1,12 +1,11 @@
 import Zotero from "zotero-lib";
 import axios from "axios";
-const zotero = new Zotero({ verbose: false });
 
 interface kItems {
   [key: string]: string;
 }
 
-async function fetchZoteroItem(itemID: string, testMode: Boolean) {
+async function fetchZoteroItem(itemID: string, testMode: Boolean,zotero:Zotero) {
   try {
     const result = await zotero.item({ key: itemID });
     console.log("\n\nget item data:", itemID);
@@ -26,7 +25,7 @@ async function fetchZoteroItem(itemID: string, testMode: Boolean) {
       return;
     }
 
-    const inputJson = response.data.message;
+    const responseJson = response.data.message;
     const k: kItems = {
       volume: "volume",
       issue: "issue",
@@ -40,10 +39,10 @@ async function fetchZoteroItem(itemID: string, testMode: Boolean) {
 
     for (const key in k) {
       let res = undefined;
-      if (k.hasOwnProperty(key) && inputJson.hasOwnProperty(k[key])) {
-        if (Array.isArray(inputJson[k[key]])) {
-          if (inputJson[k[key]].length > 0) res = inputJson[k[key]][0];
-        } else res = inputJson[k[key]];
+      if (k.hasOwnProperty(key) && responseJson.hasOwnProperty(k[key])) {
+        if (Array.isArray(responseJson[k[key]])) {
+          if (responseJson[k[key]].length > 0) res = responseJson[k[key]][0];
+        } else res = responseJson[k[key]];
       }
       if (res != undefined) {
         if (result[key] != res) updateJson[key] = res;
@@ -66,9 +65,15 @@ type CommanderOptions = string[];
 
 async function DoiComplete(values: CommanderOptions, options: any) {
   const testMode: Boolean = options.test;
-
+  let zotero;
+  if(options.group){
+    zotero = new Zotero({ verbose: false, "group-id":options.group });
+  }
+  else
+    zotero = new Zotero({ verbose: false });
+  
   for (const itemId of values) {
-    await fetchZoteroItem(itemId, testMode);
+    await fetchZoteroItem(itemId, testMode,zotero);
   }
 }
 

@@ -24,6 +24,7 @@ program
     'Add item to collection from DOI. Item must be journal articles.'
   )
   .option('-t --test', 'test mode')
+  .option('-g --group [group]', 'Zotero group ID')
   .action(async (values,options) => {
     runner(DoiComplete, values,options);
   });
